@@ -7,6 +7,7 @@ Each lab lives in its own folder.
 | Lab | Topic | Folder |
 |-----|-------|--------|
 | Lab 01 | ShopKart — Customer Authentication Service | [`Lab-01-ShopKart-Auth`](./Lab-01-ShopKart-Auth) |
+| Lab 02 | ShopKart — Customer Authentication UI (React client) | [`Lab-02-ShopKart-Client`](./Lab-02-ShopKart-Client) |
 
 ---
 
@@ -41,3 +42,28 @@ JWT_SECRET=your_jwt_secret
 | GET | `/customers/me` | Yes | Get the logged-in customer's profile |
 | POST | `/customers/logout` | Yes | Clear the authentication cookie |
 | PATCH | `/customers/change-password` | Yes | Change password (Bonus) |
+
+---
+
+## Lab 02 — ShopKart Customer Authentication UI
+
+The React client for the Lab 01 API: register, login, a protected home page
+that shows the signed-in customer, and logout. Built with React, React Router
+and Axios, using the HttpOnly session cookie the backend issues.
+
+### Run
+
+Start the Lab 01 backend first, then:
+
+```bash
+cd Lab-02-ShopKart-Client
+npm install
+npm run dev
+```
+
+The client runs on <http://localhost:5173> and expects the API on
+`http://localhost:3000` unless `VITE_API_URL` says otherwise.
+
+Full notes, including the CORS change Lab 01 needed and answers to the viva
+questions, are in [`Lab-02-ShopKart-Client/README.md`](./Lab-02-ShopKart-Client/README.md).
+
