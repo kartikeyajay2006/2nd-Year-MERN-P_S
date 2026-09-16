@@ -4,7 +4,6 @@ const mongoose = require("mongoose");
 const cookieParser = require("cookie-parser");
 const cors = require("cors");
 const customerRoutes = require("./routes/customer.routes");
-const productRoutes = require("./routes/product.routes");
 
 const app = express();
 
@@ -27,7 +26,6 @@ app.use(express.json());
 app.use(cookieParser());
 
 app.use("/customers", customerRoutes);
-app.use("/products", productRoutes);
 
 const PORT = process.env.PORT || 3000;
 

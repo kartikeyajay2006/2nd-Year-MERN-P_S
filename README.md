@@ -8,7 +8,6 @@ Each lab lives in its own folder.
 |-----|-------|--------|
 | Lab 01 | ShopKart — Customer Authentication Service | [`Lab-01-ShopKart-Auth`](./Lab-01-ShopKart-Auth) |
 | Lab 02 | ShopKart — Customer Authentication UI (React client) | [`Lab-02-ShopKart-Client`](./Lab-02-ShopKart-Client) |
-| Lab 03 | ShopKart — Product Catalog & Discovery | Existing ShopKart backend + client |
 
 ---
 
@@ -68,33 +67,3 @@ The client runs on <http://localhost:5173> and expects the API on
 Full notes, including the CORS change Lab 01 needed and answers to the viva
 questions, are in [`Lab-02-ShopKart-Client/README.md`](./Lab-02-ShopKart-Client/README.md).
 
----
-
-## Lab 03 — ShopKart Product Catalog & Discovery
-
-Lab 03 implements the product-discovery flow in the existing ShopKart app.
-MongoDB is the source of truth: Express exposes product APIs and React fetches
-and renders the resulting catalogue dynamically. Signed-in customers can visit
-`/products`, search by product name, filter by category, and open `/products/:id`
-for a product detail view. Loading, error and empty states are included.
-
-### Product API endpoints
-
-| Method | Endpoint | Description |
-|--------|----------|-------------|
-| POST | `/products` | Create a product (open API for this lab) |
-| GET | `/products` | List products; supports `search` and `category` query parameters |
-| GET | `/products/:id` | Get one product by MongoDB ID |
-
-Examples: `/products?search=keyboard`, `/products?category=Electronics`, or
-`/products?search=keyboard&category=Electronics`.
-
-### Run
-
-Use the same two processes from Labs 01 and 02. Start the backend in
-`Lab-01-ShopKart-Auth/backend`, then start the Vite client in
-`Lab-02-ShopKart-Client`. Log in and open <http://localhost:5173/products>.
-
-Product fields are `name`, `description`, `price`, `category`, `image` and
-`stock`. The schema validates a positive price and non-negative stock, and
-adds `createdAt` automatically.

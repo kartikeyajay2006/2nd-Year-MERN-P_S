@@ -1,5 +1,4 @@
 import { useAuth } from "../context/AuthContext";
-import { Link } from "react-router-dom";
 
 /**
  * Task 3 — the page you only see when the cookie says you may.
@@ -16,8 +15,7 @@ export default function Home() {
       <section className="hero">
         <p className="hero__eyebrow">ShopKart</p>
         <h1>Welcome, {customer.fullName}</h1>
-        <p className="hero__sub">You are signed in. Ready to find your next favourite thing?</p>
-        <Link className="btn" to="/products">Browse products</Link>
+        <p className="hero__sub">You are signed in. Here is what we have on file.</p>
       </section>
 
       <section className="details">
