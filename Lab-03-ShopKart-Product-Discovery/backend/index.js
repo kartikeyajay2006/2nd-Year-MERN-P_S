@@ -5,7 +5,14 @@ const cors = require("cors");
 const productRoutes = require("./routes/product.routes");
 
 const app = express();
-app.use(cors({ origin: process.env.CLIENT_URL || "http://localhost:5174" }));
+// Vite may be opened as either localhost or 127.0.0.1 during development.
+// Accept both so the browser does not block a valid local API request.
+const allowedOrigins = [
+  process.env.CLIENT_URL || "http://localhost:5174",
+  "http://localhost:5174",
+  "http://127.0.0.1:5174",
+];
+app.use(cors({ origin: allowedOrigins }));
 app.use(express.json());
 app.use("/products", productRoutes);
 
