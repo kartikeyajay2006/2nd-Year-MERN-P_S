@@ -1,10 +1,16 @@
-# Lab 02 — ShopKart Client (Login → Home Flow)
+# ShopKart Client — Labs 02 & 03
 
 The customer-facing authentication UI for ShopKart: register, log in, see your
 own details on a protected page, and log out. React + React Router + Axios,
 talking to the Lab 01 backend.
 
 No Redux, no Firebase/Clerk/Auth0 — as the brief requires.
+
+Lab 03 adds a data-driven product catalogue. After signing in, open
+`/products` to search by name, filter by category, and follow a card to the
+dynamic `/products/:id` details page. Catalogue data is fetched from the Lab 01
+backend; cards are never hard-coded. The listing and details pages both handle
+loading and request errors, while the listing also has an empty-result state.
 
 ---
 
@@ -45,10 +51,14 @@ src/
 ├── pages/
 │   ├── Login.jsx           Task 2 — sign in, cookie is set by the server
 │   ├── Register.jsx        Task 1 — create an account
-│   └── Home.jsx            Task 3 — protected, shows /customers/me
+│   ├── Home.jsx            Task 3 — protected, shows /customers/me
+│   ├── Products.jsx        Lab 03 — fetched, searchable product catalogue
+│   └── ProductDetails.jsx  Lab 03 — one product, read from its URL ID
 ├── components/
 │   ├── Navbar.jsx          Task 4 — logout lives here
-│   └── ProtectedRoute.jsx  the guard in front of /home
+│   ├── ProtectedRoute.jsx  the guard in front of /home
+│   ├── ProductCard.jsx     Lab 03 — one dynamically rendered product
+│   └── SearchBar.jsx       Lab 03 — name search and category selector
 ├── context/
 │   └── AuthContext.jsx     who is signed in, asked of the server
 ├── services/
@@ -67,6 +77,8 @@ src/
 | `/register` | Registration | public |
 | `/login` | Login | public |
 | `/home` | Customer details | signed in only |
+| `/products` | Product catalogue | signed in only |
+| `/products/:id` | Product details | signed in only |
 | `/` and anything else | redirect | — |
 
 ---
@@ -110,6 +122,20 @@ It is required, not cosmetic. The client and the API are different origins
 `credentials: true` cannot be combined with a wildcard origin — the browser
 refuses `Access-Control-Allow-Origin: *` on any request carrying cookies — so
 the client origin is named explicitly and read from the environment.
+
+---
+
+## Lab 03 API contract
+
+| Method | Endpoint | Result |
+|---|---|---|
+| POST | `/products` | Creates a validated product |
+| GET | `/products` | Lists products; accepts `search` and `category` |
+| GET | `/products/:id` | Returns one product by MongoDB ID |
+
+For example, entering `phone` and selecting Electronics requests
+`/products?search=phone&category=Electronics`. The backend builds one MongoDB
+query from those values, so the browser always displays the filtered API data.
 
 ---
 

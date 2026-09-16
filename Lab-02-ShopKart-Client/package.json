@@ -2,7 +2,7 @@
   "name": "shopkart-client",
   "private": true,
   "version": "1.0.0",
-  "description": "ShopKart customer authentication UI — Lab 02",
+  "description": "ShopKart customer authentication and product discovery UI — Labs 02–03",
   "type": "module",
   "scripts": {
     "dev": "vite",

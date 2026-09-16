@@ -27,6 +27,7 @@ export default function Navbar() {
       <nav className="nav__links">
         {customer ? (
           <>
+            <Link className="nav__link" to="/products">Products</Link>
             <span className="nav__who">{customer.fullName}</span>
             <button className="btn btn--ghost" type="button" onClick={onLogout}>
               Logout

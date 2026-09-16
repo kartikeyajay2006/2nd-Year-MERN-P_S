@@ -1,7 +1,7 @@
 {
   "name": "shopkart-backend",
   "version": "1.0.0",
-  "description": "ShopKart Customer Authentication Service",
+  "description": "ShopKart authentication and product catalogue API",
   "main": "index.js",
   "scripts": {
     "start": "node index.js",

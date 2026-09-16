@@ -63,4 +63,19 @@ export function logoutCustomer() {
   return api.post("/customers/logout");
 }
 
+/** GET /products, optionally narrowed by the catalogue's query parameters. */
+export async function fetchProducts({ search = "", category = "" } = {}) {
+  const params = {};
+  if (search.trim()) params.search = search.trim();
+  if (category) params.category = category;
+  const { data } = await api.get("/products", { params });
+  return data.products;
+}
+
+/** GET /products/:id */
+export async function fetchProduct(productId) {
+  const { data } = await api.get(`/products/${productId}`);
+  return data.product;
+}
+
 export default api;
