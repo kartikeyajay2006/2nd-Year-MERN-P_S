@@ -1,0 +1,3 @@
+import { Link, useNavigate } from "react-router-dom";
+import { useAuth } from "../context/AuthContext";
+export default function Navbar() { const { customer, signOut } = useAuth(); const navigate = useNavigate(); const logout = async () => { await signOut(); navigate("/login"); }; return <header><Link className="brand" to={customer ? "/home" : "/login"}>Shop<span>Kart</span></Link><nav>{customer ? <><Link to="/home">Home</Link><Link to="/products">Products</Link><span className="user">{customer.fullName}</span><button className="ghost" onClick={logout}>Logout</button></> : <><Link to="/login">Login</Link><Link className="small-button" to="/register">Register</Link></>}</nav></header>; }

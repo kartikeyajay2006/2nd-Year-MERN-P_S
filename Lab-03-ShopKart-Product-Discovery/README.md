@@ -1,17 +1,17 @@
 # Lab 03 — ShopKart Product Catalog & Discovery
 
-This is a separate full-stack Lab 03 submission, connected to the ShopKart
-journey built in the earlier labs:
+This is the complete, self-contained ShopKart application for Lab 03. It
+combines the work from the first three labs into one application:
 
 ```text
-Lab 01 authentication API  →  Lab 02 login UI  →  Lab 03 product discovery
-       :3000                       :5173                 :3001 / :5174
+Sign up / Login (Lab 01 + Lab 02)  →  Home  →  Product Discovery (Lab 03)
+              backend :3000               frontend :5173
 ```
 
-Lab 02 remains the customer entry point. Its home page leads into the product
-experience; this Lab 03 app keeps the catalogue API and catalogue UI isolated
-in their own folders. Both backend services use the same MongoDB connection,
-so authentication and product data stay in one ShopKart database.
+The `backend/` contains both customer authentication and product APIs. The
+`frontend/` contains Register, Login, protected Home, Products and Product
+Details routes. A customer signs in once and continues to the catalogue within
+the same browser application.
 
 ## What is implemented
 
@@ -25,25 +25,24 @@ so authentication and product data stay in one ShopKart database.
 
 ## Run the connected labs
 
-First run Lab 01 and Lab 02 as usual if you want to use the complete login →
-home → catalogue journey. Then start Lab 03 in two terminals.
+Start only Lab 03 in two terminals:
 
 ```bash
 # Terminal 1 — Lab 03 API
 cd backend
 npm install
-cp .env.example .env  # add the same MongoDB connection string used in Lab 01
-npm start             # http://localhost:3001
+cp .env.example .env  # set MONGO_URI and JWT_SECRET
+npm start             # http://localhost:3000
 
 # Terminal 2 — Lab 03 catalogue UI
 cd frontend
 npm install
-npm run dev           # http://localhost:5174
+npm run dev           # http://localhost:5173
 ```
 
-The UI defaults to `http://localhost:3001`; change it with
-`VITE_API_URL` in `frontend/.env` if needed. The **Back to Lab 02** link goes
-to the Lab 02 home page at `http://localhost:5173/home`.
+The UI defaults to `http://localhost:3000`; change it with `VITE_API_URL` in
+`frontend/.env` if needed. Open <http://localhost:5173/register> to create an
+account, then log in and browse products.
 
 ## API reference
 

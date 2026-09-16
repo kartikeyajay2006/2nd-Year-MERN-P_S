@@ -72,8 +72,8 @@ questions, are in [`Lab-02-ShopKart-Client/README.md`](./Lab-02-ShopKart-Client/
 
 ## Lab 03 — ShopKart Product Catalog & Discovery
 
-Lab 03 is a separate full-stack submission with its own product API and React
-catalogue UI. It follows the existing ShopKart sequence: Lab 01 authenticates
-the customer, Lab 02 provides the login and home experience, and Lab 03 adds
-searchable product discovery. See the [Lab 03 README](./Lab-03-ShopKart-Product-Discovery/README.md)
-for the connected run instructions and API reference.
+Lab 03 is a self-contained combined ShopKart application: the Lab 01 customer
+authentication API, Lab 02 register/login UI and Lab 03 searchable product
+catalogue run together from its own backend and frontend folders. See the
+[Lab 03 README](./Lab-03-ShopKart-Product-Discovery/README.md) for the run
+instructions and API reference.

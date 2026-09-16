@@ -16,9 +16,6 @@ export default function Home() {
         <p className="hero__eyebrow">ShopKart</p>
         <h1>Welcome, {customer.fullName}</h1>
         <p className="hero__sub">You are signed in. Here is what we have on file.</p>
-        <a className="btn" href="http://localhost:5174/products">
-          Browse products in Lab 03
-        </a>
       </section>
 
       <section className="details">
