@@ -8,6 +8,7 @@ Each lab lives in its own folder.
 |-----|-------|--------|
 | Lab 01 | ShopKart — Customer Authentication Service | [`Lab-01-ShopKart-Auth`](./Lab-01-ShopKart-Auth) |
 | Lab 02 | ShopKart — Customer Authentication UI (React client) | [`Lab-02-ShopKart-Client`](./Lab-02-ShopKart-Client) |
+| Lab 03 | ShopKart — Product Catalog & Discovery | [`Lab-03-ShopKart-Product-Discovery`](./Lab-03-ShopKart-Product-Discovery) |
 
 ---
 
@@ -67,3 +68,12 @@ The client runs on <http://localhost:5173> and expects the API on
 Full notes, including the CORS change Lab 01 needed and answers to the viva
 questions, are in [`Lab-02-ShopKart-Client/README.md`](./Lab-02-ShopKart-Client/README.md).
 
+---
+
+## Lab 03 — ShopKart Product Catalog & Discovery
+
+Lab 03 is a separate full-stack submission with its own product API and React
+catalogue UI. It follows the existing ShopKart sequence: Lab 01 authenticates
+the customer, Lab 02 provides the login and home experience, and Lab 03 adds
+searchable product discovery. See the [Lab 03 README](./Lab-03-ShopKart-Product-Discovery/README.md)
+for the connected run instructions and API reference.

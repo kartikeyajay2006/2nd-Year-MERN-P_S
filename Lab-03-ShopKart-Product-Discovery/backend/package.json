@@ -1,0 +1,10 @@
+{
+  "name": "shopkart-product-api",
+  "version": "1.0.0",
+  "private": true,
+  "description": "ShopKart product catalogue API — Lab 03",
+  "main": "index.js",
+  "scripts": { "start": "node index.js", "dev": "nodemon index.js" },
+  "dependencies": { "cors": "^2.8.5", "dotenv": "^17.4.2", "express": "^5.2.1", "mongoose": "^9.9.4" },
+  "devDependencies": { "nodemon": "^3.1.14" }
+}
