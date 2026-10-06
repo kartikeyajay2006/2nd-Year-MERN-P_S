@@ -6,4 +6,9 @@ import Login from "./pages/Login";
 import Register from "./pages/Register";
 import Products from "./pages/Products";
 import ProductDetails from "./pages/ProductDetails";
-export default function App() { return <><Navbar /><Routes><Route path="/" element={<Navigate to="/home" replace />} /><Route path="/register" element={<Register />} /><Route path="/login" element={<Login />} /><Route path="/home" element={<ProtectedRoute><Home /></ProtectedRoute>} /><Route path="/products" element={<ProtectedRoute><Products /></ProtectedRoute>} /><Route path="/products/:id" element={<ProtectedRoute><ProductDetails /></ProtectedRoute>} /><Route path="*" element={<Navigate to="/login" replace />} /></Routes></>; }
+import Wishlist from "./pages/Wishlist";
+import Cart from "./pages/Cart";
+import Checkout from "./pages/Checkout";
+import Orders from "./pages/Orders";
+import OrderDetails from "./pages/OrderDetails";
+export default function App() { return <><Navbar /><Routes><Route path="/" element={<Navigate to="/home" replace />} /><Route path="/register" element={<Register />} /><Route path="/login" element={<Login />} /><Route path="/home" element={<ProtectedRoute><Home /></ProtectedRoute>} /><Route path="/products" element={<ProtectedRoute><Products /></ProtectedRoute>} /><Route path="/products/:id" element={<ProtectedRoute><ProductDetails /></ProtectedRoute>} /><Route path="/wishlist" element={<ProtectedRoute><Wishlist /></ProtectedRoute>} /><Route path="/cart" element={<ProtectedRoute><Cart /></ProtectedRoute>} /><Route path="/checkout" element={<ProtectedRoute><Checkout /></ProtectedRoute>} /><Route path="/orders" element={<ProtectedRoute><Orders /></ProtectedRoute>} /><Route path="/orders/:id" element={<ProtectedRoute><OrderDetails /></ProtectedRoute>} /><Route path="*" element={<Navigate to="/home" replace />} /></Routes><footer className="site-footer"><span>shopkart.</span><p>Curated for the everyday.</p><small>© 2026 ShopKart</small></footer></>; }

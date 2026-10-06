@@ -9,6 +9,9 @@ Each lab lives in its own folder.
 | Lab 01 | ShopKart — Customer Authentication Service | [`Lab-01-ShopKart-Auth`](./Lab-01-ShopKart-Auth) |
 | Lab 02 | ShopKart — Customer Authentication UI (React client) | [`Lab-02-ShopKart-Client`](./Lab-02-ShopKart-Client) |
 | Lab 03 | ShopKart — Product Catalog & Discovery | [`Lab-03-ShopKart-Product-Discovery`](./Lab-03-ShopKart-Product-Discovery) |
+| Lab 04 | ShopKart — Wishlist | [`Lab-04-ShopKart-Wishlist`](./Lab-04-ShopKart-Wishlist) |
+| Lab 05 | ShopKart — Shopping Cart | [`Lab-05-ShopKart-Shopping-Cart`](./Lab-05-ShopKart-Shopping-Cart) |
+| Lab 06 | ShopKart — Checkout & Orders | [`Lab-06-ShopKart-Checkout-Orders`](./Lab-06-ShopKart-Checkout-Orders) |
 
 ---
 
@@ -77,3 +80,8 @@ authentication API, Lab 02 register/login UI and Lab 03 searchable product
 catalogue run together from its own backend and frontend folders. See the
 [Lab 03 README](./Lab-03-ShopKart-Product-Discovery/README.md) for the run
 instructions and API reference.
+
+Labs 04–06 continue in the same Lab 03 application so products, accounts,
+wishlist, cart and orders remain connected. Start with the
+[connected app README](./Lab-03-ShopKart-Product-Discovery/README.md) to run
+the full flow.

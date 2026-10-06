@@ -1,5 +1,9 @@
+import { ArrowUpRight } from "lucide-react";
 import { Link } from "react-router-dom";
-const money = new Intl.NumberFormat("en-IN", { style: "currency", currency: "INR", maximumFractionDigits: 0 });
-export default function ProductCard({ product }) {
-  return <article className="card"><img src={product.image} alt={product.name} /><div><small>{product.category}</small><h2>{product.name}</h2><strong>{money.format(product.price)}</strong><p className={product.stock ? "stock" : "out"}>{product.stock ? `${product.stock} units left` : "Out of stock"}</p><Link className="button" to={`/products/${product._id}`}>View Details</Link></div></article>;
+import AddCartButton from "./AddCartButton";
+import WishlistButton from "./WishlistButton";
+import { money } from "../utils/format";
+
+export default function ProductCard({ product, saved, onSaved }) {
+  return <article className="product-card"><div className="product-image"><Link to={`/products/${product._id}`}><img src={product.image} alt={product.name} loading="lazy" /></Link><span className="product-badge">{product.category}</span><div className="floating-wish"><WishlistButton id={product._id} saved={saved} onSaved={onSaved} compact /></div></div><div className="product-info"><div className="product-title-row"><Link to={`/products/${product._id}`}><h3>{product.name}</h3></Link><ArrowUpRight size={18} /></div><p className={product.stock ? "stock-label" : "stock-label unavailable"}>{product.stock ? `${product.stock} available` : "Out of stock"}</p><div className="product-bottom"><strong>{money(product.price)}</strong><Link to={`/products/${product._id}`}>Details →</Link></div><AddCartButton product={product} compact /></div></article>;
 }

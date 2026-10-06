@@ -1,6 +1,8 @@
 const mongoose = require("mongoose");
 const Product = require("../models/product.model");
 
+const escapeRegex = (value) => value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+
 function validationError({ name, description, price, category, image, stock }) {
   if (!name || !description || price === undefined || !category || !image || stock === undefined) return "Name, description, price, category, image and stock are required";
   if (typeof price !== "number" || !Number.isFinite(price) || price <= 0) return "Price must be greater than 0";
@@ -22,8 +24,8 @@ exports.getProducts = async (req, res) => {
     const query = {};
     const search = req.query.search?.trim();
     const category = req.query.category?.trim();
-    if (search) query.name = { $regex: search.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"), $options: "i" };
-    if (category) query.category = category;
+    if (search) query.name = { $regex: escapeRegex(search), $options: "i" };
+    if (category) query.category = { $regex: `^${escapeRegex(category)}$`, $options: "i" };
     const products = await Product.find(query).select("name price category image stock").sort({ createdAt: -1 });
     return res.status(200).json({ success: true, count: products.length, products });
   } catch { return res.status(500).json({ success: false, message: "Internal server error" }); }
