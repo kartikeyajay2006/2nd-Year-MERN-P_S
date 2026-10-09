@@ -52,7 +52,7 @@ async function seed() {
   await mongoose.connect(process.env.MONGO_URI);
   await Product.bulkWrite(
     products.map((product) => ({
-      updateOne: { filter: { name: product.name }, update: { $set: product }, upsert: true },
+      updateOne: { filter: { name: product.name }, update: { $setOnInsert: product }, upsert: true },
     }))
   );
   console.log(`Seeded ${products.length} products.`);

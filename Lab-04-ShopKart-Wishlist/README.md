@@ -2,7 +2,8 @@
 
 Lab 04 extends the [connected ShopKart app](../Lab-03-ShopKart-Product-Discovery/README.md).
 The wishlist stores Product ObjectId references on the authenticated
-Customer. It does not use a global frontend wishlist store.
+Customer. A shared React context mirrors the signed-in customer’s saved IDs
+so catalog hearts and wishlist actions stay consistent.
 
 ## Implemented
 
@@ -10,8 +11,8 @@ Customer. It does not use a global frontend wishlist store.
   `DELETE /wishlist/:productId` APIs, including invalid ID, missing product,
   duplicate and absent-item responses.
 - Populated products returned only for the signed-in customer.
-- Save buttons on product cards and product details, with saving, saved and
-  error states.
+- Toggle hearts on product cards and product details, with add/remove, busy,
+  pressed state and success/error notifications.
 - `/wishlist` with product cards, removal, loading, retry and empty states.
 - Navigation from catalog to wishlist and back to product details.
 

@@ -1,0 +1,11 @@
+{
+  "name": "shopkart-assignment",
+  "private": true,
+  "scripts": {
+    "setup": "npm ci --prefix Lab-03-ShopKart-Product-Discovery/backend && npm ci --prefix Lab-03-ShopKart-Product-Discovery/frontend",
+    "dev": "node scripts/dev.cjs",
+    "test": "npm test --prefix Lab-03-ShopKart-Product-Discovery/backend",
+    "build": "npm run build --prefix Lab-03-ShopKart-Product-Discovery/frontend"
+  },
+  "engines": { "node": ">=20.19" }
+}

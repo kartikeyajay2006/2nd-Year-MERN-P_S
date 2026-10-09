@@ -1,27 +1,16 @@
-# Lab 06 — ShopKart Checkout & Orders
+# Lab 06 — ShopKart checkout and orders
 
-Lab 06 completes the [connected ShopKart app](../Lab-03-ShopKart-Product-Discovery/README.md)
-with Razorpay **Test Mode** Standard Checkout. You must provide your own
-Razorpay test key ID and secret in the backend `.env` before testing payment.
+The [connected app](../Lab-03-ShopKart-Product-Discovery/README.md) supports a complete **cash-on-delivery** order journey without credentials, plus **Razorpay Test Mode** when configured with your own backend test keys.
 
-## Implemented
+- Protected `/checkout` validates shipping fields, Indian mobile numbers and six-digit pincodes.
+- `POST /orders/cash-on-delivery` calculates the total from current database prices and atomically places the order, reduces stock and consumes purchased cart quantities.
+- `POST /orders/create-payment-order` saves a purchase snapshot and creates a Razorpay test order. Missing credentials produce a useful error; COD remains available.
+- `POST /orders/verify-payment` validates the stored Razorpay order ID and HMAC signature, then transactionally marks the order paid and updates inventory/cart. Repeated verification is idempotent.
+- `/orders` and `/orders/:id` show actual saved status, item snapshots, shipping details and payment method. Reads enforce customer ownership. COD orders remain payment-pending, with their total due on delivery.
+- Order confirmation persists on refresh. New cart additions made while Razorpay is open are preserved. Concurrent COD checkouts cannot oversell stock.
 
-- `/checkout` shipping form with required fields, Indian mobile number and
-  six-digit pincode validation, order summary, busy and error states.
-- Protected `POST /orders/create-payment-order`: reloads cart and Products,
-  checks stock, computes totals on the server, saves a pending order snapshot
-  and creates a Razorpay order with an amount in paise.
-- Razorpay Checkout loaded in React. Its response is sent to protected
-  `POST /orders/verify-payment`; HMAC SHA256 is checked against the stored
-  Razorpay order ID with the backend secret.
-- Verified payment becomes `PAID` / `PLACED` and clears the backend and
-  frontend cart. A failed or cancelled payment leaves the cart intact.
-- Protected `GET /orders` and `GET /orders/:id`, `/orders` history and an
-  order detail/confirmation page. Single-order reads enforce ownership.
+Order transactions require a MongoDB replica set. The root `npm run dev` starts one automatically. Fulfillment automation, live-money payments and refunds are outside this assignment; see the [review](../docs/PROJECT_REVIEW.md).
 
-Source: [Order model](../Lab-03-ShopKart-Product-Discovery/backend/models/order.model.js),
-[order controller](../Lab-03-ShopKart-Product-Discovery/backend/controllers/order.controller.js),
-[checkout page](../Lab-03-ShopKart-Product-Discovery/frontend/src/pages/Checkout.jsx),
-[orders pages](../Lab-03-ShopKart-Product-Discovery/frontend/src/pages/Orders.jsx).
+Sources: [order controller](../Lab-03-ShopKart-Product-Discovery/backend/controllers/order.controller.js), [transaction helpers](../Lab-03-ShopKart-Product-Discovery/backend/utils/order.js), [checkout](../Lab-03-ShopKart-Product-Discovery/frontend/src/pages/Checkout.jsx).
 
-Run and test from the [app README](../Lab-03-ShopKart-Product-Discovery/README.md).
+Setup and verification: [root README](../README.md).

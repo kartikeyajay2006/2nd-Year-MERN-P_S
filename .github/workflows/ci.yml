@@ -1,0 +1,40 @@
+name: ShopKart checks
+on:
+  push:
+    branches: [main]
+  pull_request:
+permissions:
+  contents: read
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: |
+            Lab-03-ShopKart-Product-Discovery/backend/package-lock.json
+            Lab-03-ShopKart-Product-Discovery/frontend/package-lock.json
+      - run: npm run setup
+      - run: npm test
+      - run: npm run build
+      - name: Install test browser
+        working-directory: Lab-03-ShopKart-Product-Discovery/frontend
+        run: npx playwright install --with-deps chromium
+      - name: Start application
+        run: |
+          npm run dev > /tmp/shopkart-dev.log 2>&1 &
+          node -e 'const poll = async () => { for (let n=0; n<90; n++) { try { const r=await fetch("http://127.0.0.1:3000/health"); if (r.ok) return; } catch {} await new Promise(r=>setTimeout(r,1000)); } process.exit(1); }; poll();'
+      - name: Browser journeys
+        working-directory: Lab-03-ShopKart-Product-Discovery/frontend
+        env:
+          E2E_CHROME_CHANNEL: chromium
+        run: npm run test:e2e
+      - uses: actions/upload-artifact@v4
+        if: failure()
+        with:
+          name: browser-failure
+          path: Lab-03-ShopKart-Product-Discovery/frontend/test-results/

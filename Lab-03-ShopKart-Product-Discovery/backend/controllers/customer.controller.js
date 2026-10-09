@@ -1,28 +1,109 @@
 const bcrypt = require("bcrypt");
 const Customer = require("../models/customer.model");
 const generateToken = require("../utils/generateToken");
-
-exports.registerCustomer = async (req, res) => {
+const cookieOptions = () => ({
+  httpOnly: true,
+  secure: process.env.NODE_ENV === "production",
+  sameSite: "strict",
+  path: "/",
+});
+const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+exports.registerCustomer = async (req, res, next) => {
   try {
-    const { fullName, email, password, phone } = req.body;
-    if (!fullName || !email || !password || !phone) return res.status(400).json({ success: false, message: "All fields are required" });
-    if (password.length < 6) return res.status(400).json({ success: false, message: "Password must be at least 6 characters long" });
-    if (await Customer.findOne({ email })) return res.status(409).json({ success: false, message: "Email already exists" });
-    const customer = await Customer.create({ fullName, email, password: await bcrypt.hash(password, 10), phone });
-    return res.status(201).json({ success: true, message: "Customer registered successfully", customer: { _id: customer._id, fullName: customer.fullName, email: customer.email, phone: customer.phone } });
-  } catch { return res.status(500).json({ success: false, message: "Internal server error" }); }
+    const { fullName, email, password, phone } = req.body || {};
+    if (
+      [fullName, email, password, phone].some(
+        (value) => typeof value !== "string" || !value.trim(),
+      )
+    )
+      return res.status(400).json({ message: "All fields are required" });
+    if (fullName.trim().length < 2 || fullName.length > 100)
+      return res
+        .status(400)
+        .json({ message: "Name must contain 2–100 characters" });
+    if (!emailPattern.test(email.trim()) || email.length > 254)
+      return res.status(400).json({ message: "Enter a valid email address" });
+    if (!/^[6-9]\d{9}$/.test(phone.trim()))
+      return res
+        .status(400)
+        .json({ message: "Enter a valid 10-digit Indian mobile number" });
+    if (password.length < 8 || Buffer.byteLength(password) > 72)
+      return res
+        .status(400)
+        .json({
+          message:
+            "Password must have at least 8 characters and at most 72 bytes",
+        });
+    const customer = await Customer.create({
+      fullName: fullName.trim(),
+      email: email.trim().toLowerCase(),
+      password: await bcrypt.hash(password, 12),
+      phone: phone.trim(),
+    });
+    return res
+      .status(201)
+      .json({
+        success: true,
+        message: "Account created. You can now sign in.",
+        customer: {
+          _id: customer._id,
+          fullName: customer.fullName,
+          email: customer.email,
+          phone: customer.phone,
+        },
+      });
+  } catch (error) {
+    if (error.code === 11000)
+      return res
+        .status(409)
+        .json({ message: "An account with this email already exists" });
+    next(error);
+  }
 };
-
-exports.loginCustomer = async (req, res) => {
+exports.loginCustomer = async (req, res, next) => {
   try {
-    const { email, password } = req.body;
-    if (!email || !password) return res.status(400).json({ success: false, message: "Email and password are required" });
-    const customer = await Customer.findOne({ email });
-    if (!customer || !(await bcrypt.compare(password, customer.password))) return res.status(401).json({ success: false, message: "Invalid credentials" });
-    res.cookie("token", generateToken(customer._id), { httpOnly: true, secure: false, sameSite: "strict", maxAge: 7 * 24 * 60 * 60 * 1000 });
-    return res.status(200).json({ success: true, message: "Login successful", customer: { _id: customer._id, fullName: customer.fullName, email: customer.email, phone: customer.phone } });
-  } catch { return res.status(500).json({ success: false, message: "Internal server error" }); }
+    const { email, password } = req.body || {};
+    if (
+      typeof email !== "string" ||
+      typeof password !== "string" ||
+      !email.trim() ||
+      !password
+    )
+      return res
+        .status(400)
+        .json({ message: "Email and password are required" });
+    const customer = await Customer.findOne({
+      email: email.trim().toLowerCase(),
+    });
+    if (!customer || !(await bcrypt.compare(password, customer.password)))
+      return res
+        .status(401)
+        .json({ message: "Email or password is incorrect" });
+    res.cookie("token", generateToken(customer._id), {
+      ...cookieOptions(),
+      maxAge: 7 * 24 * 60 * 60 * 1000,
+    });
+    return res.json({
+      success: true,
+      customer: {
+        _id: customer._id,
+        fullName: customer.fullName,
+        email: customer.email,
+        phone: customer.phone,
+      },
+    });
+  } catch (error) {
+    next(error);
+  }
 };
-
-exports.getMyProfile = (req, res) => res.status(200).json(req.user);
-exports.logoutCustomer = (req, res) => { res.clearCookie("token", { httpOnly: true, secure: false, sameSite: "strict" }); return res.status(200).json({ success: true, message: "Logged out successfully" }); };
+exports.getMyProfile = (req, res) =>
+  res.json({
+    _id: req.user._id,
+    fullName: req.user.fullName,
+    email: req.user.email,
+    phone: req.user.phone,
+  });
+exports.logoutCustomer = (_req, res) => {
+  res.clearCookie("token", cookieOptions());
+  return res.json({ success: true });
+};
