@@ -6,7 +6,7 @@
     "dev": "node scripts/dev.cjs",
     "test": "npm test --prefix Lab-03-ShopKart-Product-Discovery/backend",
     "build": "npm run build --prefix Lab-03-ShopKart-Product-Discovery/frontend",
-    "vercel-build": "(test -z \"$MONGO_URI\" || npm run seed --prefix Lab-03-ShopKart-Product-Discovery/backend) && VITE_API_URL=/api npm run build --prefix Lab-03-ShopKart-Product-Discovery/frontend"
+    "vercel-build": "export MONGO_URI=\"${MONGO_URI:-$MONGODB_URI}\"; (test -z \"$MONGO_URI\" || npm run seed --prefix Lab-03-ShopKart-Product-Discovery/backend) && VITE_API_URL=/api npm run build --prefix Lab-03-ShopKart-Product-Discovery/frontend"
   },
   "engines": { "node": ">=20.19" }
 }

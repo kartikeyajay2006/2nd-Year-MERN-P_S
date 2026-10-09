@@ -4,6 +4,7 @@
   "installCommand": "npm ci --omit=dev --prefix Lab-03-ShopKart-Product-Discovery/backend && npm ci --prefix Lab-03-ShopKart-Product-Discovery/frontend",
   "buildCommand": "npm run vercel-build",
   "outputDirectory": "Lab-03-ShopKart-Product-Discovery/frontend/dist",
+  "regions": ["bom1"],
   "rewrites": [
     { "source": "/api/(.*)", "destination": "/api" },
     { "source": "/(.*)", "destination": "/index.html" }

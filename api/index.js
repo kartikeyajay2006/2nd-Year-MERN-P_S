@@ -1,6 +1,8 @@
 // Vercel serverless entry: serves the ShopKart Express API under /api on the
 // same domain as the storefront, so the Strict session cookie keeps working.
 process.env.NODE_ENV = "production";
+// The Vercel MongoDB Atlas integration provides MONGODB_URI.
+process.env.MONGO_URI ||= process.env.MONGODB_URI;
 const {
   app,
   connectDatabase,
