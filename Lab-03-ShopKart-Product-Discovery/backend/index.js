@@ -13,11 +13,21 @@ const orderRoutes = require("./routes/order.routes");
 const app = express();
 // Vite may be opened as either localhost or 127.0.0.1 during development.
 // Accept both so the browser does not block a valid local API request.
+// On Vercel, the deployment's own URLs are trusted as well.
 const allowedOrigins = [
   process.env.CLIENT_URL || "http://localhost:5173",
   "http://localhost:5173",
   "http://127.0.0.1:5173",
+  ...[
+    process.env.VERCEL_PROJECT_PRODUCTION_URL,
+    process.env.VERCEL_BRANCH_URL,
+    process.env.VERCEL_URL,
+  ]
+    .filter(Boolean)
+    .map((host) => `https://${host}`),
 ];
+// Vercel's edge sets X-Forwarded-For; rate limits must key on the visitor.
+if (process.env.VERCEL) app.set("trust proxy", 1);
 app.use(cors({ origin: allowedOrigins, credentials: true }));
 app.disable("x-powered-by");
 app.use(express.json({ limit: "20kb" }));
@@ -91,17 +101,30 @@ app.use((error, _req, res, _next) => {
 });
 
 const PORT = process.env.PORT || 3000;
-async function startServer() {
+// Serverless instances handle many requests; connect once and reuse it.
+let connection;
+function connectDatabase() {
   const missingSettings = ["MONGO_URI", "JWT_SECRET"].filter(
     (key) => !process.env[key],
   );
   if (missingSettings.length) {
-    throw new Error(
-      `Missing required environment variable(s): ${missingSettings.join(", ")}`,
+    return Promise.reject(
+      new Error(
+        `Missing required environment variable(s): ${missingSettings.join(", ")}`,
+      ),
     );
   }
+  connection ??= mongoose
+    .connect(process.env.MONGO_URI, { serverSelectionTimeoutMS: 10000 })
+    .catch((error) => {
+      connection = undefined;
+      throw error;
+    });
+  return connection;
+}
 
-  await mongoose.connect(process.env.MONGO_URI);
+async function startServer() {
+  await connectDatabase();
   return app.listen(PORT, () =>
     console.log(`Product API running on port ${PORT}`),
   );
@@ -114,4 +137,4 @@ if (require.main === module) {
   });
 }
 
-module.exports = { app, startServer };
+module.exports = { app, connectDatabase, startServer };
