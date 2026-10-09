@@ -9,6 +9,8 @@ npm run dev
 
 Open http://127.0.0.1:5173. The runner starts a persistent MongoDB replica set on port 27018, the API on port 3000, and Vite on port 5173. Register an account, explore the collection, save a wishlist, build a bag and complete a **cash-on-delivery** order without any API keys.
 
+**Live demo:** https://shopkart-black-one.vercel.app (Vercel + MongoDB Atlas).
+
 Razorpay **Test Mode** is also supported with your own optional backend credentials. Never commit `.env` or place server secrets in frontend variables.
 
 The [root README](../README.md) contains the complete feature list, screenshots, architecture, environment settings, routes, troubleshooting and deployment notes. The [project review](../docs/PROJECT_REVIEW.md) explains findings and remaining boundaries.

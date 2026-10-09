@@ -14,8 +14,15 @@
 </p>
 
 <p align="center">
+  <a href="https://shopkart-black-one.vercel.app"><img src="https://img.shields.io/badge/Live%20demo-shopkart--black--one.vercel.app-d9edac?style=for-the-badge&logo=vercel&logoColor=243e2e&labelColor=243e2e" alt="Open the live ShopKart demo" /></a>
+</p>
+
+<p align="center">
   <b>A complete MERN shopping assignment</b> — browse, save, bag and check out, with real orders and stock stored in MongoDB.
   <br />
+  <b>Live:</b> <a href="https://shopkart-black-one.vercel.app">https://shopkart-black-one.vercel.app</a>
+  <br />
+  <a href="#-try-it-live">Live demo</a> ·
   <a href="#-see-it-in-action">Demo</a> ·
   <a href="#-run-it-in-two-commands">Quick start</a> ·
   <a href="#-a-tour-of-the-store">Screens</a> ·
@@ -23,6 +30,21 @@
   <a href="#-how-it-works">Architecture</a> ·
   <a href="#-tests">Tests</a>
 </p>
+
+## 🌐 Try it live
+
+**👉 [shopkart-black-one.vercel.app](https://shopkart-black-one.vercel.app)**
+
+Create an account, browse the 41-product collection, save favourites, fill your bag and place a **cash-on-delivery** order — it is stored in a real MongoDB Atlas database and appears under *My orders*.
+
+| | |
+| --- | --- |
+| **Hosting** | Vercel — React build on the CDN, Express API as a serverless function at `/api` |
+| **Region** | Mumbai (`bom1`) for both the API and the database |
+| **Database** | MongoDB Atlas (free cluster, replica set, so checkout transactions work) |
+| **Payments** | Cash on delivery works fully. Razorpay Test Mode is not configured on the live site and shows a clear message if chosen |
+
+<sub>The first request after the site has been idle can take a second or two while the serverless API starts.</sub>
 
 ## 🎬 See it in action
 
@@ -187,6 +209,8 @@ The runnable app lives in **`Lab-03-ShopKart-Product-Discovery/`**. Labs 04–06
 
 ```text
 2nd-Year-MERN-P_S/
+├── api/index.js                       # Vercel serverless entry for the Express API
+├── vercel.json                        # Vercel build, region and /api routing
 ├── scripts/dev.cjs                    # one command: MongoDB + seed + API + web
 ├── Lab-01-ShopKart-Auth/              # earlier auth exercise
 ├── Lab-02-ShopKart-Client/            # earlier React client exercise
@@ -284,6 +308,34 @@ npm run test:e2e  # Playwright browser journeys
 
 The browser tests use installed Google Chrome. Without it, run `npx playwright install chromium` and then `E2E_CHROME_CHANNEL=chromium npm run test:e2e`. Razorpay responses are mocked in tests; a live Test Mode payment needs your own keys and is not claimed as verified.
 
+## ☁️ Deployment
+
+The live site runs on **Vercel** as a single project, so the storefront and the API share one domain and the Strict session cookie keeps working.
+
+```mermaid
+flowchart LR
+    B["🌍 Browser"] --> V["▲ Vercel · shopkart-black-one.vercel.app"]
+    V -->|"/, /products, /cart …"| S["React build (static, SPA fallback)"]
+    V -->|"/api/*"| F["λ api/index.js → Express app (bom1)"]
+    F --> A[("🍃 MongoDB Atlas · Mumbai")]
+```
+
+- **`vercel.json`** installs both apps, builds the React app with `VITE_API_URL=/api`, routes `/api/*` to the function and every other path to `index.html`.
+- **`api/index.js`** reuses one MongoDB connection per instance and hands each request to the same Express app used locally.
+- **Build-time seeding:** each deploy runs `seed.js`, which only inserts missing products and never resets stock or user data.
+- **Environment variables** (set in the Vercel project, never committed): `MONGODB_URI` from the MongoDB Atlas integration and a random `JWT_SECRET`. Razorpay test keys are optional.
+
+<details>
+<summary>Deploy your own copy</summary>
+
+```bash
+npx vercel link                                   # create or link a Vercel project
+npx vercel integration add mongodbatlas -m clusterTier=FREE
+openssl rand -hex 48 | npx vercel env add JWT_SECRET production --sensitive
+npx vercel deploy --prod
+```
+</details>
+
 ## 🔐 Security and limits
 
 - Passwords are hashed with bcrypt; sessions live in **HttpOnly** cookies (Secure in production).
@@ -291,12 +343,10 @@ The browser tests use installed Google Chrome. Without it, run `npx playwright i
 - `.env` files, dependencies, build output, local database files and test artifacts are git-ignored; only example env files are tracked.
 - Not included: real payments, refunds, admin dashboard, password recovery or courier booking. See [docs/PROJECT_REVIEW.md](docs/PROJECT_REVIEW.md) for the full list of findings and boundaries.
 
-**Deployment:** not live. To deploy, use a Node host with MongoDB Atlas, build the React app, set env vars on the host, add an SPA fallback, and serve frontend and API over HTTPS on the same site.
-
 ---
 
 <p align="center">
-  Made by <a href="https://github.com/kartikeyajay2006"><b>Kartikeya Yadav</b></a> · 2nd-year MERN lab assignment
+  Made by <a href="https://github.com/kartikeyajay2006"><b>Kartikeya Yadav</b></a> · 2nd-year MERN lab assignment · <a href="https://shopkart-black-one.vercel.app">Live demo</a>
   <br />
   <sub>Photography: Unsplash · Fonts: DM Sans, Manrope, Playfair Display</sub>
 </p>
